@@ -13,6 +13,16 @@ const userSchema = new Schema(
       required: false,
       default: false,
     },
+
+    name: {
+      type: String,
+      required: false,
+    },
+
+    avatar: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,
