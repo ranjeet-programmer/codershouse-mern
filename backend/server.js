@@ -5,15 +5,18 @@ const app = express();
 const router = require("./routes");
 const DBConnect = require("./database");
 const PORT = process.env.PORT || 5500;
-
+const cookieParser = require("cookie-parser");
 DBConnect();
 
+app.use(cookieParser());
 const corsOptions = {
   origin: ["http://localhost:3000"],
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
-app.use(express.json());
+app.use("/storage", express.static("storage"));
+app.use(express.json({ limit: "8mb" }));
 app.use(router);
 
 app.get("/", (req, res) => {
