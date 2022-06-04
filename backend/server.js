@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 const router = require("./routes");
 const DBConnect = require("./database");
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 5000;
 const cookieParser = require("cookie-parser");
 DBConnect();
 
