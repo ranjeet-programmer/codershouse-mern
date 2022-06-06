@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Card from "../../../components/shared/Card/Card";
 import Button from "../../../components/shared/Button/Button";
 import styles from "./StepAvatar.module.css";
@@ -7,10 +7,12 @@ import { setAvatar } from "../../../store/activateSlice";
 import { setAuth } from "../../../store/authSlice";
 import { activate } from "../../../http";
 import Loader from "../../../components/shared/Loader/Loader";
+
 const StepAvatar = ({ onNext }) => {
   const { name, avatar } = useSelector((state) => state.activate);
   const [image, setImage] = useState("/images/monkey-avatar.png");
   const [loading, setLoading] = useState(false);
+  const [unMounted, setUnMounted] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -23,6 +25,7 @@ const StepAvatar = ({ onNext }) => {
     reader.onloadend = function () {
       setImage(reader.result);
       dispatch(setAvatar(reader.result));
+      console.log(reader.result);
     };
   }
 
@@ -33,7 +36,9 @@ const StepAvatar = ({ onNext }) => {
       const { data } = await activate({ name, avatar });
 
       if (data.auth) {
-        dispatch(setAuth(data));
+        if (!unMounted) {
+          dispatch(setAuth(data));
+        }
       }
     } catch (error) {
       console.log(error);
@@ -41,6 +46,12 @@ const StepAvatar = ({ onNext }) => {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    return () => {
+      setUnMounted(true);
+    };
+  }, []);
 
   if (loading) {
     return <Loader message="Activation in Progress" />;
