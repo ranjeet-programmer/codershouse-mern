@@ -7,13 +7,15 @@ class ActivateController {
   async activate(req, res) {
     // Activation logic
     const { name, avatar } = req.body;
+    console.log("Avatar " + avatar);
+
     if (!name || !avatar) {
       res.status(400).json({ message: "All fields are required!" });
     }
 
     // Image Base64
     const buffer = Buffer.from(
-      avatar.replace(/^data:image\/(png|jpeg|jpg);base64,/, ""),
+      avatar.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""),
       "base64"
     );
     const imagePath = `${Date.now()}-${Math.round(Math.random() * 1e9)}.png`;
