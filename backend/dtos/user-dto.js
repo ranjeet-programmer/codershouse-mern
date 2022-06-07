@@ -12,7 +12,6 @@ class UserDto {
     this.activated = user.activated;
     this.createdAt = user.createdAt;
     this.name = user.name;
-    this.avatar = user.avatar ? `http://localhost:5000${user.avatar}` : null;
   }
 }
 

@@ -1,84 +1,93 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AddRoomModal from "../../components/AddRoomModal/AddRoomModal";
 import RoomCard from "../../components/RoomCard/RoomCard";
 import styles from "./Rooms.module.css";
+import { getAllRooms } from "../../http";
+// const rooms = [
+//   {
+//     id: 1,
+//     topic: " Which Framework is Best for React JS",
+//     speakers: [
+//       {
+//         id: 1,
+//         name: "John Doe",
+//         avatar: "/images/monkey-avatar.png",
+//       },
+//       {
+//         id: 2,
+//         name: "John Doe",
+//         avatar: "/images/monkey-avatar.png",
+//       },
+//       {
+//         id: 3,
+//         name: "John Doe",
+//         avatar: "/images/monkey-avatar.png",
+//       },
+//     ],
 
-const rooms = [
-  {
-    id: 1,
-    topic: " Which Framework is Best for React JS",
-    speakers: [
-      {
-        id: 1,
-        name: "John Doe",
-        avatar: "/images/monkey-avatar.png",
-      },
-      {
-        id: 2,
-        name: "John Doe",
-        avatar: "/images/monkey-avatar.png",
-      },
-      {
-        id: 3,
-        name: "John Doe",
-        avatar: "/images/monkey-avatar.png",
-      },
-    ],
+//     totalPeople: 40,
+//   },
 
-    totalPeople: 40,
-  },
+//   {
+//     id: 2,
+//     topic: " Tik Tok vs Instagram who is best ?",
+//     speakers: [
+//       {
+//         id: 1,
+//         name: "John Doe",
+//         avatar: "/images/monkey-avatar.png",
+//       },
+//       {
+//         id: 2,
+//         name: "John Doe",
+//         avatar: "/images/monkey-avatar.png",
+//       },
+//       {
+//         id: 3,
+//         name: "John Doe",
+//         avatar: "/images/monkey-avatar.png",
+//       },
+//     ],
 
-  {
-    id: 2,
-    topic: " Tik Tok vs Instagram who is best ?",
-    speakers: [
-      {
-        id: 1,
-        name: "John Doe",
-        avatar: "/images/monkey-avatar.png",
-      },
-      {
-        id: 2,
-        name: "John Doe",
-        avatar: "/images/monkey-avatar.png",
-      },
-      {
-        id: 3,
-        name: "John Doe",
-        avatar: "/images/monkey-avatar.png",
-      },
-    ],
+//     totalPeople: 40,
+//   },
 
-    totalPeople: 40,
-  },
+//   {
+//     id: 3,
+//     topic: " Free Fire Vs PUBg",
+//     speakers: [
+//       {
+//         id: 1,
+//         name: "John Doe",
+//         avatar: "/images/monkey-avatar.png",
+//       },
+//       {
+//         id: 2,
+//         name: "John Doe",
+//         avatar: "/images/monkey-avatar.png",
+//       },
+//       {
+//         id: 3,
+//         name: "John Doe",
+//         avatar: "/images/monkey-avatar.png",
+//       },
+//     ],
 
-  {
-    id: 3,
-    topic: " Free Fire Vs PUBg",
-    speakers: [
-      {
-        id: 1,
-        name: "John Doe",
-        avatar: "/images/monkey-avatar.png",
-      },
-      {
-        id: 2,
-        name: "John Doe",
-        avatar: "/images/monkey-avatar.png",
-      },
-      {
-        id: 3,
-        name: "John Doe",
-        avatar: "/images/monkey-avatar.png",
-      },
-    ],
-
-    totalPeople: 40,
-  },
-];
+//     totalPeople: 40,
+//   },
+// ];
 
 const Rooms = () => {
   const [showModal, setShowModal] = useState(false);
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    const fetchRooms = async () => {
+      const { data } = await getAllRooms();
+      setRooms(data);
+    };
+    fetchRooms();
+  }, []);
 
   function openModal() {
     setShowModal(true);
