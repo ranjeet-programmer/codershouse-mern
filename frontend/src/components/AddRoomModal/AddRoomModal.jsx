@@ -1,10 +1,27 @@
 import React, { useState } from "react";
 import styles from "./AddRoomModal.module.css";
 import TextInput from "../shared/TextInput/TextInput";
+import { createRoom as create } from "../../http";
+import { useHistory } from "react-router-dom";
 
 const AddRoomModal = ({ onClose }) => {
+  const history = useHistory();
+
   const [roomType, setRoomType] = useState("open");
   const [topic, setTopic] = useState("");
+
+  async function createRoom() {
+    // server call
+
+    try {
+      if (!topic) return;
+      const { data } = await create({ topic, roomType });
+      history.push(`/room/${data.id}`);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <div className={styles.modalMask}>
@@ -57,7 +74,7 @@ const AddRoomModal = ({ onClose }) => {
         <div className={styles.modalFooter}>
           <h2>Start a room , open to everyone </h2>
 
-          <button className={styles.footerButton}>
+          <button className={styles.footerButton} onClick={createRoom}>
             <img src="/images/celebration.png" alt="celebration" />
             <span>Lets's Go</span>
           </button>

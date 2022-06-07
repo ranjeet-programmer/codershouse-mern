@@ -22,10 +22,18 @@ const userSchema = new Schema(
     avatar: {
       type: String,
       required: false,
+      get: (avatar) => {
+        if (avatar) {
+          return `http://localhost:5000${avatar}`;
+        }
+
+        return avatar;
+      },
     },
   },
   {
     timestamps: true,
+    toJSON: { getters: true },
   }
 );
 
