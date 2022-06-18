@@ -6,6 +6,13 @@ const router = require("./routes");
 const DBConnect = require("./database");
 const PORT = process.env.PORT || 5000;
 const cookieParser = require("cookie-parser");
+const ACTIONS = require("./actions");
+const server = require("http").createServer(app);
+
+const io = require("socket.io")(server, {
+  cors: { origin: "http://localhost:3000", methods: ["GET", "POST"] },
+});
+
 DBConnect();
 
 app.use(cookieParser());
@@ -23,6 +30,29 @@ app.get("/", (req, res) => {
   res.send("Hello from express js");
 });
 
-app.listen(5000, () => {
+// sockets
+
+const socketUserMapping = {};
+
+io.on("connection", (socket) => {
+  console.log("a user connected", socket.id);
+
+  socket.on(ACTIONS.JOIN, ({ roomId, user }) => {
+    socketUserMapping[socket.id] = user;
+
+    const clients = Array.from(io.sockets.adapter.rooms.get(roomId) || []);
+
+    clients.forEach((clientId) => {
+      io.to(clientId).emit(ACTIONS.ADD_PEER, {});
+    });
+
+    socket.emit(ACTIONS.ADD_PEER, {});
+
+    socket.join(roomId);
+    console.log(clients);
+  });
+});
+
+server.listen(5000, () => {
   console.log(`Server is running on port ${PORT}`);
 });
